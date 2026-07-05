@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="zh-CN" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="google" content="notranslate">
+<meta name="theme-color" content="#0f766e">
+<title>HSK 1 Listening & Reading Challenge · 15 Soal (Offline)</title>
+<style>
+    :root {
+        --primary: #0f766e;
+        --primary-dark: #312e81;
+        --accent: #84cc16;
+        --bg-soft: #eef2ff;
+        --text-color: #1e1b3a;
+        --border-color: #d8dcf0;
+        --ok: #059669;
+        --bad: #dc2626;
+        --radius: 14px;
+    }
+    * { box-sizing: border-box; }
+    body {
+        font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+        background: linear-gradient(180deg,#f0fdf4 0%,#ecfeff 100%);
+        margin: 0; padding: 0; color: var(--text-color);
+        user-select: none !important; -webkit-user-select: none !important;
+    }
+    header {
+        background: linear-gradient(120deg, var(--primary) 0%, var(--accent) 130%);
+        color: white; padding: 16px 22px; display: flex; justify-content: space-between;
+        align-items: center; flex-wrap: wrap; gap: 8px; position: fixed; top: 0; width: 100%;
+        box-sizing: border-box; z-index: 1000; box-shadow: 0 4px 18px rgba(67,56,202,0.35);
+    }
+    header .title { font-weight: 700; font-size: 18px; }
+    header .timer-box { font-size: 17px; font-weight: bold; background: rgba(255,255,255,0.18); padding: 6px 16px; border-radius: 999px; }
+
+    .container {
+        max-width: 720px; margin: 96px auto 40px auto; background: #ffffff; padding: 32px;
+        border-radius: 20px; box-shadow: 0 10px 40px rgba(67,56,202,0.10);
+    }
+
+    .login-screen {
+        max-width: 420px; margin: 100px auto; background: #ffffff; padding: 40px 36px;
+        border-radius: 22px; box-shadow: 0 15px 45px rgba(67,56,202,0.18); text-align: center;
+        border-top: 6px solid var(--primary);
+    }
+    .login-screen h2 { color: var(--primary-dark); margin-bottom: 6px; }
+    .login-screen p.sub { color: #6b7280; margin-bottom: 26px; font-size: 14px; }
+    .form-group { margin-bottom: 20px; text-align: left; }
+    .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--primary-dark); font-size: 14px; }
+    .form-group input {
+        width: 100%; padding: 13px 14px; border: 1.5px solid var(--border-color);
+        border-radius: 10px; box-sizing: border-box; font-size: 16px;
+    }
+    .form-group input:focus { outline: none; border-color: var(--primary); }
+
+    .btn {
+        background: linear-gradient(120deg, var(--primary), var(--accent));
+        color: white; padding: 13px 25px; border: none; border-radius: 999px;
+        cursor: pointer; font-size: 16px; font-weight: 700; width: 100%;
+        transition: transform .12s, box-shadow .12s; box-shadow: 0 6px 18px rgba(67,56,202,0.30);
+    }
+    .btn:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(67,56,202,0.35); }
+
+    .exam-info {
+        background: var(--bg-soft); padding: 16px 18px; border-radius: var(--radius);
+        margin-bottom: 26px; line-height: 1.6; border: 1px solid #dfe3fb;
+    }
+
+    .question-block {
+        padding: 20px 18px; margin: 14px 0; background: #fbfbff;
+        border: 1px solid #e5e7f7; border-radius: var(--radius);
+        box-shadow: 0 2px 8px rgba(30,27,58,0.03);
+    }
+    .question-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .question-text { font-size: 18px; font-weight: 500; margin-bottom: 10px; line-height: 1.6; }
+
+    .flag-btn { background: #eef0fb; border: 1px solid #cfd4f5; color: var(--primary-dark); padding: 6px 14px; border-radius: 999px; cursor: pointer; font-size: 12px; font-weight: 700; }
+    .flag-btn.flagged { background: #f59e0b; color: white; border-color: #d97706; }
+
+    .options { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-top: 10px; }
+    .option-label {
+        display: flex; align-items: center; padding: 11px 12px; border: 1.5px solid var(--border-color);
+        border-radius: 10px; cursor: pointer; transition: 0.15s; background: #fff;
+    }
+    .option-label:hover { background-color: #f4f5ff; border-color: var(--primary); }
+    .option-label input { margin-right: 10px; transform: scale(1.2); accent-color: var(--primary); }
+
+    .hidden { display: none !important; }
+
+    .result-card { border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; border: 1px solid #e5e7f7; }
+    .result-card.correct { background: #ecfdf5; border-color: #a7f3d0; }
+    .result-card.wrong { background: #fef2f2; border-color: #fecaca; }
+    .score-box { display: flex; gap: 16px; flex-wrap: wrap; margin: 22px 0; }
+    .score-pill { flex: 1; min-width: 150px; background: var(--bg-soft); border-radius: 16px; padding: 18px; text-align: center; border: 1px solid #dfe3fb; }
+    .score-pill .num { font-size: 30px; font-weight: 800; background: linear-gradient(120deg, var(--primary), var(--accent)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+    .nav-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 6px; margin: 18px 0; }
+    .nav-item { height: 34px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border-color); border-radius: 8px; font-size: 12px; cursor: pointer; font-weight: 700; color: var(--primary-dark); }
+    .nav-item.answered { background-color: var(--ok) !important; color: white !important; border-color: #047857 !important; }
+    .nav-item.flagged { background-color: #f59e0b !important; color: white !important; border-color: #d97706 !important; }
+
+    @media (max-width: 600px) {
+        .container { margin: 84px 10px 20px 10px; padding: 18px; border-radius: 16px; }
+        .login-screen { margin: 20px auto; padding: 28px 20px; max-width: 100%; box-shadow: none; min-height: 100vh; box-sizing: border-box; border-radius: 0; border-top: none; }
+        .question-text { font-size: 16px; }
+        .options { grid-template-columns: 1fr; gap: 8px; }
+        .option-label { padding: 12px 10px; font-size: 15px; }
+        .option-label input { transform: scale(1.4); margin-right: 12px; }
+        .nav-grid { grid-template-columns: repeat(5, 1fr); }
+        .btn { font-size: 15px; padding: 14px; }
+    }
+</style>
+</head>
+<body>
+
+<div id="login-screen" class="login-screen">
+    <h2>HSK 1 Listening & Reading Challenge</h2>
+    <p class="sub">Created by Ranir Atfar R</p>
+    <div class="form-group">
+        <label>Nama Lengkap (nda tersimpan ji)</label>
+        <input type="text" id="student-name" placeholder="Tulis nama Anda" autocomplete="off">
+    </div>
+    <button class="btn" id="btn-login" onclick="startExam()">Mulai Kuis 🚀</button>
+</div>
+
+<header id="exam-header" class="hidden">
+    <div class="title">HSK 1 Listening & Reading Challenge</div>
+    <div>Peserta: <span id="display-name"></span></div>
+    <div class="timer-box">⏱ <span id="timer">10:00</span></div>
+</header>
+
+<div id="exam-container" class="container hidden">
+    <div class="exam-info">
+        <strong>📝 Petunjuk:</strong> Audio bisa diputar maksimal 2x, pakai suara Text-to-Speech browser.
+    </div>
+    <div class="nav-grid" id="nav-grid-container"></div>
+    <form id="exam-form">
+        <div id="questions-wrapper"></div>
+        <br>
+        <button type="button" class="btn" style="background:linear-gradient(120deg,#059669,#84cc16); font-size: 18px; padding: 16px;" onclick="submitExam()">✅ Kumpulkan Jawaban</button>
+    </form>
+</div>
+
+<div id="result-container" class="container hidden"></div>
+
+<script>
+/* ===================== DATA SOAL (5 Listening + 10 Reading) ===================== */
+const questions = [
+    // ---- LISTENING (diputar via Text-to-Speech bawaan browser, HANYA 1x) ----
+    {q:1, type:"ltf", audio:"现在是三点，妈妈在看电视。", t:"现在是三点。", ans:"对"},
+    {q:2, type:"ltf", audio:"我不喜欢喝咖啡，我喜欢喝茶。", t:"我喜欢喝咖啡。", ans:"不对"},
+    {q:3, type:"lmc", audio:"他是我的老师，他姓王。", t:"他姓什么？", a:"王", b:"李", c:"张", d:"刘", ans:"A"},
+    {q:4, type:"lmc", audio:"现在下雨了，我们坐出租车去吧。", t:"他们怎么去？", a:"走路", b:"坐出租车", c:"坐公共汽车", d:"骑自行车", ans:"B"},
+    {q:5, type:"lmc", audio:"小狗不在桌子上面，它在桌子下面。", t:"小狗在哪儿？", a:"桌子上面", b:"桌子下面", c:"椅子上面", d:"门后面", ans:"B"},
+    {q:6, type:"ltf", audio:"今天星期五，明天星期六。", t:"明天星期六。", ans:"对"},
+    {q:7, type:"ltf", audio:"姐姐在医院工作，她是医生。", t:"姐姐是老师。", ans:"不对"},
+    {q:8, type:"ltf", audio:"我家有四口人：爸爸、妈妈、姐姐和我。", t:"我家有四口人。", ans:"对"},
+    {q:9, type:"lmc", audio:"现在八点，我们去学校吧。", t:"现在几点？", a:"七点", b:"八点", c:"九点", d:"十点", ans:"B"},
+    {q:10, type:"lmc", audio:"这个苹果十五块钱，那个苹果十二块钱。", t:"哪个苹果十二块钱？", a:"这个苹果", b:"那个苹果", c:"两个都十五块", d:"不知道", ans:"B"},
+    {q:11, type:"lmc", audio:"妈妈在厨房做饭，爸爸在客厅看电视。", t:"爸爸在哪儿？", a:"厨房", b:"学校", c:"客厅", d:"医院", ans:"C"},
+    {q:12, type:"lmc", audio:"我今天很忙，没有时间看电影。", t:"他今天没有时间做什么？", a:"吃饭", b:"看电影", c:"学习", d:"睡觉", ans:"B"},
+    {q:13, type:"ltf", audio:"她喜欢看书，也喜欢写汉字。", t:"她喜欢写汉字。", ans:"对"},
+    {q:14, type:"lmc", audio:"弟弟今年十岁，妹妹八岁。", t:"妹妹今年几岁？", a:"七岁", b:"八岁", c:"九岁", d:"十岁", ans:"B"},
+    {q:15, type:"lmc", audio:"请给我一杯水，谢谢。", t:"他想喝什么？", a:"茶", b:"咖啡", c:"牛奶", d:"水", ans:"D"},
+    // ---- READING ----
+  {q:16, type:"tf", t:"我很好。 # 我是很好。", ans:"不对"},
+{q:17, type:"tf", t:"你忙不忙？我今天很忙。 # 他今天很忙。", ans:"对"},
+{q:18, type:"mc", t:"老师，请你说______。", a:"一下", b:"一点", c:"一些", d:"一个", ans:"A"},
+{q:19, type:"mc", t:"猫______桌子下面。", a:"有", b:"在", c:"是", d:"去", ans:"B"},
+{q:20, type:"mc", t:"请______大到小说这些数字。", a:"从", b:"在", c:"对", d:"给", ans:"A"},
+{q:21, type:"mc", t:"我是中国人，你______？", a:"呢", b:"吗", c:"吧", d:"啊", ans:"A"},
+{q:22, type:"mc", t:"老师______学生说：“请坐。”", a:"对", b:"给", c:"在", d:"和", ans:"A"},
+{q:23, type:"mc", t:"今天晚上我们吃米饭______面条？", a:"和", b:"也", c:"还是", d:"都", ans:"C"},
+{q:24, type:"tf", t:"我有看这本书了。 # 我已经看了这本书。", ans:"对"},
+{q:25, type:"mc", t:"你的汉语______？", a:"怎么", b:"怎么样", c:"什么", d:"哪儿", ans:"B"},
+{q:26, type:"mc", t:"你______去学校？", a:"怎么样", b:"怎么", c:"什么", d:"谁", ans:"B"},
+{q:27, type:"tf", t:"我喜欢喝茶，还喜欢喝咖啡。 # 我喜欢喝茶，也喜欢喝咖啡。", ans:"对"},
+{q:28, type:"mc", t:"他______老师，还是学生？", a:"吗", b:"是", c:"在", d:"有", ans:"B"},
+{q:29, type:"mc", t:"姐姐会说汉语，弟弟______会说一点。", a:"还是", b:"还", c:"都", d:"很", ans:"B"},
+{q:30, type:"mc", t:"你有没有中国朋友？", a:"有", b:"没有", c:"有，没有都可以", d:"是不是", ans:"C"}
+];
+
+const TOTAL_QUESTIONS = questions.length;
+let totalDuration = 30 * 60; // 15 menit (5 Listening + 10 Reading)
+let countdownTimer;
+let studentName = "";
+let examStarted = false;
+
+function buildHeaderHTML(qNum) {
+    return `<div class="question-header">
+                <strong>Soal No. ${qNum}</strong>
+                <button type="button" class="flag-btn" id="flag-${qNum}" onclick="toggleFlag(${qNum})">⭐ Tandai</button>
+            </div>`;
+}
+
+/* ================= AUDIO (Text-to-Speech, MAKSIMAL 2x PUTAR) ================= */
+const MAX_PLAYS = 2;
+let ttsVoice = null;
+let audioPlayCounts = {};
+
+function loadZhVoice() {
+    const voices = window.speechSynthesis ? window.speechSynthesis.getVoices() : [];
+    ttsVoice = voices.find(v => v.lang && v.lang.toLowerCase().startsWith('zh')) || null;
+}
+if (window.speechSynthesis) {
+    loadZhVoice();
+    window.speechSynthesis.onvoiceschanged = loadZhVoice;
+}
+
+function playAudioOnce(qNum, text) {
+    const btn = document.getElementById(`audio-btn-${qNum}`);
+    if (!btn || btn.disabled) return;
+
+    audioPlayCounts[qNum] = audioPlayCounts[qNum] || 0;
+    if (audioPlayCounts[qNum] >= MAX_PLAYS) return; // sudah mencapai batas maksimal
+
+    if (!window.speechSynthesis) {
+        alert("Browser Anda tidak mendukung audio (Text-to-Speech). Silakan gunakan Chrome/Edge terbaru.");
+        return;
+    }
+
+    audioPlayCounts[qNum]++;
+    btn.disabled = true;
+    btn.innerText = "🔊 Memutar...";
+
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = "zh-CN";
+    if (ttsVoice) utter.voice = ttsVoice;
+    utter.rate = 0.50;
+
+    const sisa = MAX_PLAYS - audioPlayCounts[qNum];
+    utter.onend = () => {
+        if (sisa > 0) {
+            btn.disabled = false;
+            btn.innerText = `🔊 Putar Audio (sisa ${sisa}x)`;
+        } else {
+            btn.innerText = "✅ Sudah Diputar 2x";
+        }
+    };
+    utter.onerror = () => {
+        if (sisa > 0) {
+            btn.disabled = false;
+            btn.innerText = `🔊 Putar Audio (sisa ${sisa}x)`;
+        } else {
+            btn.innerText = "✅ Sudah Diputar 2x";
+        }
+    };
+
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(utter);
+}
+
+function buildAudioHTML(qNum, audioText) {
+    return `<div style="background:#f0fdfa; border:1.5px dashed var(--primary); border-radius:10px; padding:12px 14px; margin-bottom:12px; display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+                <button type="button" class="btn" style="width:auto; padding:9px 18px; font-size:14px;" id="audio-btn-${qNum}" onclick="playAudioOnce(${qNum}, '${audioText.replace(/'/g, "\\'")}')">🔊 Putar Audio (sisa 2x)</button>
+                <span style="font-size:12px; color:#6b7280;">⚠️ Audio bisa diputar maksimal 2x, seperti ujian HSK asli.</span>
+            </div>`;
+}
+
+function initQuestions() {
+    let html = "";
+    questions.forEach(item => {
+        if (item.type === "ltf") {
+            html += `<div class="question-block" id="block-${item.q}">
+                        ${buildHeaderHTML(item.q)}
+                        ${buildAudioHTML(item.q, item.audio)}
+                        <div class="question-text">
+                            <div style="background:#fffbeb; padding:10px 14px; border-left:4px solid #f59e0b; border-radius:8px; font-size:15px; color:#78350f;"><strong>Pernyataan:</strong> ${item.t}</div>
+                        </div>
+                        <div class="options">
+                            <label class="option-label"><input type="radio" name="q${item.q}" value="对" onchange="markAnswered(${item.q})"> 对 (Benar)</label>
+                            <label class="option-label"><input type="radio" name="q${item.q}" value="不对" onchange="markAnswered(${item.q})"> 不对 (Salah)</label>
+                        </div>
+                     </div>`;
+        } else if (item.type === "lmc") {
+            html += `<div class="question-block" id="block-${item.q}">
+                        ${buildHeaderHTML(item.q)}
+                        ${buildAudioHTML(item.q, item.audio)}
+                        <div class="question-text">${item.t}</div>
+                        <div class="options" style="grid-template-columns: 1fr;">
+                            <label class="option-label"><input type="radio" name="q${item.q}" value="A" onchange="markAnswered(${item.q})"> A. ${item.a}</label>
+                            <label class="option-label"><input type="radio" name="q${item.q}" value="B" onchange="markAnswered(${item.q})"> B. ${item.b}</label>
+                            <label class="option-label"><input type="radio" name="q${item.q}" value="C" onchange="markAnswered(${item.q})"> C. ${item.c}</label>
+                            <label class="option-label"><input type="radio" name="q${item.q}" value="D" onchange="markAnswered(${item.q})"> D. ${item.d}</label>
+                        </div>
+                     </div>`;
+        } else if (item.type === "tf") {
+            const parts = item.t.split('#');
+            html += `<div class="question-block" id="block-${item.q}">
+                        ${buildHeaderHTML(item.q)}
+                        <div class="question-text">
+                            <div style="background:#eef2ff; padding:12px 14px; border-left:4px solid var(--primary); border-radius:8px; font-size:17px; margin-bottom:10px;">${parts[0].trim()}</div>
+                            ${parts[1] ? `<div style="background:#fffbeb; padding:10px 14px; border-left:4px solid #f59e0b; border-radius:8px; font-size:15px; color:#78350f;"><strong>Pernyataan:</strong> ${parts[1].trim()}</div>` : ''}
+                        </div>
+                        <div class="options">
+                            <label class="option-label"><input type="radio" name="q${item.q}" value="对" onchange="markAnswered(${item.q})"> 对 (Benar)</label>
+                            <label class="option-label"><input type="radio" name="q${item.q}" value="不对" onchange="markAnswered(${item.q})"> 不对 (Salah)</label>
+                        </div>
+                     </div>`;
+        } else {
+            html += `<div class="question-block" id="block-${item.q}">
+                        ${buildHeaderHTML(item.q)}
+                        <div class="question-text">${item.t}</div>
+                        <div class="options" style="grid-template-columns: 1fr;">
+                            <label class="option-label"><input type="radio" name="q${item.q}" value="A" onchange="markAnswered(${item.q})"> A. ${item.a}</label>
+                            <label class="option-label"><input type="radio" name="q${item.q}" value="B" onchange="markAnswered(${item.q})"> B. ${item.b}</label>
+                            <label class="option-label"><input type="radio" name="q${item.q}" value="C" onchange="markAnswered(${item.q})"> C. ${item.c}</label>
+                            <label class="option-label"><input type="radio" name="q${item.q}" value="D" onchange="markAnswered(${item.q})"> D. ${item.d}</label>
+                        </div>
+                     </div>`;
+        }
+    });
+    document.getElementById('questions-wrapper').innerHTML = html;
+
+    let gridHtml = "";
+    for (let i = 1; i <= TOTAL_QUESTIONS; i++) {
+        gridHtml += `<div class="nav-item" id="nav-item-${i}" onclick="scrollToQuestion(${i})">${i}</div>`;
+    }
+    document.getElementById('nav-grid-container').innerHTML = gridHtml;
+}
+
+function scrollToQuestion(qNum) {
+    document.getElementById(`block-${qNum}`).scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+function markAnswered(qNum) { document.getElementById(`nav-item-${qNum}`).classList.add('answered'); }
+function toggleFlag(qNum) {
+    document.getElementById(`flag-${qNum}`).classList.toggle('flagged');
+    document.getElementById(`nav-item-${qNum}`).classList.toggle('flagged');
+}
+
+function startExam() {
+    studentName = document.getElementById('student-name').value.trim();
+    if (!studentName) {
+        alert("Silakan isi nama Anda terlebih dahulu.");
+        return;
+    }
+    document.getElementById('display-name').innerText = studentName;
+    document.getElementById('login-screen').classList.add('hidden');
+    document.getElementById('exam-header').classList.remove('hidden');
+    document.getElementById('exam-container').classList.remove('hidden');
+
+    examStarted = true;
+    initQuestions();
+    startTimer();
+}
+
+function startTimer() {
+    countdownTimer = setInterval(() => {
+        totalDuration--;
+        let mins = Math.floor(totalDuration / 60);
+        let secs = totalDuration % 60;
+        document.getElementById('timer').innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        if (totalDuration <= 0) {
+            clearInterval(countdownTimer);
+            alert("Waktu habis! Jawaban akan otomatis dikumpulkan.");
+            submitExam(true);
+        }
+    }, 1000);
+}
+
+function getAnswerText(item, val) {
+    if (!val || val === '-') return '(tidak dijawab)';
+    if (item.type === 'mc' || item.type === 'lmc') {
+        const map = { A: item.a, B: item.b, C: item.c, D: item.d };
+        return map[val] ? `${val}. ${map[val]}` : val;
+    }
+    return val; // tf/ltf: "对" / "不对" sudah teks lengkap
+}
+
+function submitExam(isAuto) {
+    if (!isAuto && !confirm("Yakin ingin mengumpulkan jawaban sekarang?")) return;
+
+    clearInterval(countdownTimer);
+    document.getElementById('exam-header').classList.add('hidden');
+    document.getElementById('exam-container').classList.add('hidden');
+
+    const formData = new FormData(document.getElementById('exam-form'));
+
+    let correct = 0;
+    let detailHtml = "";
+    questions.forEach(item => {
+        const userAns = (formData.get(`q${item.q}`) || "-").trim();
+        const isCorrect = userAns === item.ans;
+        if (isCorrect) correct++;
+
+        const userAnsText = getAnswerText(item, userAns);
+        const correctAnsText = getAnswerText(item, item.ans);
+
+        detailHtml += `<div class="result-card ${isCorrect ? 'correct' : 'wrong'}">
+                <strong>Soal ${item.q}</strong> — Jawaban Anda: <strong>${userAnsText}</strong> ${isCorrect ? '✅' : `❌ (Jawaban benar: <strong>${correctAnsText}</strong>)`}
+            </div>`;
+    });
+
+    const resultHtml = `
+        <h2 style="color:var(--primary-dark);">✅ Hasil Kuis — ${studentName}</h2>
+        <p style="color:#6b7280;">Kuis ini tidak menyimpan data apa pun; hasilnya cuma tampil di layar ini.</p>
+        <div class="score-box">
+            <div class="score-pill"><div class="num">${correct}/${TOTAL_QUESTIONS}</div>Skor Benar</div>
+            <div class="score-pill"><div class="num">${Math.round((correct/TOTAL_QUESTIONS)*100)}</div>Nilai (skala 100)</div>
+        </div>
+        ${detailHtml}
+        <br>
+        <button type="button" class="btn" onclick="location.reload()">Ulangi Kuis</button>
+    `;
+
+    const resultContainer = document.getElementById('result-container');
+    resultContainer.innerHTML = resultHtml;
+    resultContainer.classList.remove('hidden');
+    window.scrollTo(0, 0);
+}
+</script>
+</body>
+</html>
